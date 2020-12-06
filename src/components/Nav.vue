@@ -28,9 +28,20 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
-        <!-- <li class="nav-item">
-          
-        </li> -->
+        <li class="nav-item">
+          <router-link
+            to="/price"
+            class="nav-link"
+            v-bind:class="[
+              this.$route.path == '/price' || this.$route.path == '/price/add'
+                ? 'active'
+                : '',
+            ]"
+          >
+            Price
+          </router-link>
+        </li>
+
         <li class="nav-item">
           <router-link
             to="/license"
@@ -41,21 +52,11 @@
                 ? 'active'
                 : '',
             ]"
-            >License</router-link
           >
+            License
+          </router-link>
         </li>
-        <li class="nav-item">
-          <router-link
-            to="/price"
-            class="nav-link"
-            v-bind:class="[
-              this.$route.path == '/price' || this.$route.path == '/price/add'
-                ? 'active'
-                : '',
-            ]"
-            >Price</router-link
-          >
-        </li>
+
         <li class="nav-item">
           <router-link
             to="/ref"
@@ -65,9 +66,26 @@
                 ? 'active'
                 : '',
             ]"
-            >Ref</router-link
           >
+            Ref
+          </router-link>
         </li>
+
+        <li class="nav-item">
+          <router-link
+            to="/contact"
+            class="nav-link"
+            v-bind:class="[
+              this.$route.path == '/contact' ||
+              this.$route.path == '/contact/add'
+                ? 'active'
+                : '',
+            ]"
+          >
+            Contact
+          </router-link>
+        </li>
+
         <li class="nav-item">
           <a href="#" class="nav-link" @click="logout()">Logout</a>
         </li>
@@ -81,7 +99,7 @@ export default {
   methods: {
     logout: function () {
       localStorage.removeItem("token");
-      window.location.reload();
+      this.$router.push({ path: "/login" });
     },
   },
 };
