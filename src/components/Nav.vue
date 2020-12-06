@@ -12,8 +12,7 @@
         class="rounded-circle mr-2 border border-white"
         width="42px"
       />
-      Admin</router-link
-    >
+    </router-link>
 
     <!-- Toggler/collapsibe Button -->
     <button
