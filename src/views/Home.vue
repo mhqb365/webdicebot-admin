@@ -3,7 +3,7 @@
     <Nav />
 
     <div class="container pt-4">
-      <div class="btn-group mb-2">
+      <div class="btn-group mb-3">
         <button
           type="button"
           class="btn"
@@ -30,9 +30,9 @@
         </button>
       </div>
 
-      <div class="row text-white">
+      <div class="row text-white text-center mb-3">
         <div class="col-sm-12 col-md-3">
-          <div class="rounded p-4 bg-warning mb-2 text-center">
+          <div class="rounded p-4 bg-warning mb-2">
             Income DOGE
             <h4>
               <span v-if="isLoading">?</span>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="col-sm-12 col-md-3">
-          <div class="rounded p-4 bg-primary mb-2 text-center">
+          <div class="rounded p-4 bg-primary mb-2">
             License
             <h4>
               <span v-if="isLoading">?</span>
@@ -52,7 +52,7 @@
         </div>
 
         <div class="col-sm-12 col-md-3">
-          <div class="rounded p-4 bg-success mb-2 text-center">
+          <div class="rounded p-4 bg-success mb-2">
             Pay
             <h4>
               <span v-if="isLoading">?</span>
@@ -62,13 +62,55 @@
         </div>
 
         <div class="col-sm-12 col-md-3">
-          <div class="rounded p-4 bg-danger mb-2 text-center">
+          <div class="rounded p-4 bg-danger mb-2">
             Free
             <h4>
               <span v-if="isLoading">?</span>
               <span v-else>{{ free }}</span>
             </h4>
           </div>
+        </div>
+      </div>
+
+      <div class="row text-center mb-3">
+        <div class="col-sm-12 col-md-3">
+          <router-link to="/price">
+            <div class="card mb-2">
+              <div class="card-body">Price</div>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+          <router-link to="/license">
+            <div class="card mb-2">
+              <div class="card-body">License</div>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+          <router-link to="/ref">
+            <div class="card mb-2">
+              <div class="card-body">Ref</div>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+          <router-link to="/contact">
+            <div class="card mb-2">
+              <div class="card-body">Contact</div>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+          <router-link to="/login">
+            <div class="card mb-2" @click="logout()">
+              <div class="card-body">Logout</div>
+            </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -155,6 +197,10 @@ export default {
           }
         }
       });
+    },
+    logout: function () {
+      localStorage.removeItem("token");
+      this.$router.push({ path: "/login" });
     },
   },
 };

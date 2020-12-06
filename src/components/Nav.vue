@@ -1,7 +1,19 @@
 <template>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- Brand -->
-    <!-- <img src="/static/logo.png" class="rounded-circle" width="36px" height="36px" /> -->
+
+    <router-link
+      to="/"
+      class="text-white"
+      v-bind:class="[this.$route.path == '/' ? 'active' : '']"
+    >
+      <img
+        src="/static/logo.png"
+        class="rounded-circle mr-2 border border-white"
+        width="42px"
+      />
+      Admin</router-link
+    >
 
     <!-- Toggler/collapsibe Button -->
     <button
@@ -16,14 +28,9 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link
-            to="/"
-            class="nav-link"
-            v-bind:class="[this.$route.path == '/' ? 'active' : '']"
-            >Dashboard</router-link
-          >
-        </li>
+        <!-- <li class="nav-item">
+          
+        </li> -->
         <li class="nav-item">
           <router-link
             to="/license"
@@ -51,18 +58,6 @@
         </li>
         <li class="nav-item">
           <router-link
-            to="/code"
-            class="nav-link"
-            v-bind:class="[
-              this.$route.path == '/code' || this.$route.path == '/code/add'
-                ? 'active'
-                : '',
-            ]"
-            >Code</router-link
-          >
-        </li>
-        <li class="nav-item">
-          <router-link
             to="/ref"
             class="nav-link"
             v-bind:class="[
@@ -71,19 +66,6 @@
                 : '',
             ]"
             >Ref</router-link
-          >
-        </li>
-        <li class="nav-item">
-          <router-link
-            to="/contact"
-            class="nav-link"
-            v-bind:class="[
-              this.$route.path == '/contact' ||
-              this.$route.path == '/contact/add'
-                ? 'active'
-                : '',
-            ]"
-            >Contact</router-link
           >
         </li>
         <li class="nav-item">
@@ -99,7 +81,7 @@ export default {
   methods: {
     logout: function () {
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      window.location.reload();
     },
   },
 };

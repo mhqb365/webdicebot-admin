@@ -21,4 +21,8 @@ export default {
 #app {
   font-family: "Montserrat", sans-serif;
 }
+
+a:hover {
+  text-decoration: none;
+}
 </style>

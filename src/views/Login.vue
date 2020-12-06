@@ -47,7 +47,7 @@ export default {
         if (!response.data.status)
           return this.showAlert(response.data.message, false);
         localStorage.setItem("token", response.data.token);
-        window.location.href = "/";
+        this.$router.push({ path: "/" })
       });
     },
   },
