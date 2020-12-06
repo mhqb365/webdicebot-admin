@@ -3,7 +3,7 @@
     <Nav />
 
     <div class="container pt-4">
-      <router-link to="/ref/add">
+      <router-link to="/contact/add">
         <button type="button" class="btn btn-primary mb-2">Add</button>
       </router-link>
 
@@ -27,24 +27,45 @@
         </li>
       </ul>
 
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by phone number"
+          v-model="keyword"
+          @change="search()"
+        />
+        <div class="input-group-append">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="emptyKeyWord()"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
       <div class="table-responsive-sm">
         <div v-if="isLoading" class="spinner-border"></div>
 
         <table v-else class="table table-bordered table-sm bg-white">
           <thead>
-            <th>Title</th>
-            <th>Url</th>
+            <th>Time</th>
+            <th>Name</th>
+            <th>Phone number</th>
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="data in datas" :key="data._id">
-              <td>{{ data.title.slice(0, 32) }}</td>
-              <td>{{ data.url }}</td>
+            <tr v-for="data in datas" :key="data._id" :id="data._id">
+              <td>{{ new Date(data.time).toLocaleDateString("vi-VN") }}</td>
+              <td>{{ data.name }}</td>
+              <td>{{ data.phoneNumber }}</td>
               <td>
                 <button
                   type="button"
                   class="btn btn-danger btn-sm"
-                  @click="confirm(data._id)"
+                  @click="confirm(data._id, 'delete')"
                 >
                   Delete
                 </button>
@@ -69,8 +90,10 @@ export default {
   data() {
     return {
       isLoading: false,
+      keyword: "",
       datas: [],
       perPage: 10,
+      currentPage: 1,
       page: 1,
       totalDocs: 0,
       totalPages: 0,
@@ -87,7 +110,9 @@ export default {
       axios({
         url:
           API_URL +
-          `/ref?limit=${this.perPage}&page=${page ? page : this.page}`,
+          `/contact?limit=${this.perPage}&page=${
+            page ? page : this.currentPage
+          }`,
         method: "GET",
         headers: {
           token: localStorage.getItem("token"),
@@ -104,24 +129,52 @@ export default {
         })
         .catch(() => this.$router.push({ path: "/login" }));
     },
-    confirm: function (id) {
+    search: function (page) {
+      if (this.keyword == "") return this.fetch();
+      this.isLoading = !this.isLoading;
+      axios({
+        url:
+          API_URL +
+          `/contact/search?keyword=${this.keyword}&limit=${this.perPage}&page=${
+            page ? page : this.currentPage
+          }`,
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }).then((response) => {
+        this.isLoading = !this.isLoading;
+        this.datas = response.data.docs;
+      });
+    },
+    confirm: function (id, action) {
       this.$swal
         .fire({
           title: "Are you sure?",
           showCancelButton: true,
         })
         .then((result) => {
-          if (result.value)
-            return axios({
-              url: API_URL + "/ref/delete/" + id,
-              method: "DELETE",
-              headers: {
-                token: localStorage.getItem("token"),
-              },
-            }).then((response) => {
-              this.fetch();
-            });
+          if (result.value) {
+            switch (action) {
+              case "delete":
+                axios({
+                  url: API_URL + "/contact/" + id,
+                  method: "DELETE",
+                  headers: {
+                    token: localStorage.getItem("token"),
+                  },
+                }).then((response) => {
+                  $("#" + id).remove();
+                  this.showAlert("Delete success");
+                });
+                break;
+            }
+          }
         });
+    },
+    emptyKeyWord: function () {
+      this.keyword = "";
+      this.fetch();
     },
   },
 };

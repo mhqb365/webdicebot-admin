@@ -8,6 +8,10 @@ import Price from '@/views/Price'
 import AddPrice from '@/views/Price/Add'
 import Ref from '@/views/Ref'
 import AddRef from '@/views/Ref/Add'
+import Contact from '@/views/Contact'
+import AddContact from '@/views/Contact/Add'
+import Code from '@/views/Code'
+import AddCode from '@/views/Code/Add'
 
 Vue.use(Router)
 
@@ -58,6 +62,30 @@ const router = new Router({
       path: '/ref/add',
       name: 'Add ref',
       component: AddRef,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/contact',
+      name: 'Contact',
+      component: Contact,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/contact/add',
+      name: 'Add contact',
+      component: AddContact,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/code',
+      name: 'Code',
+      component: Code,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/code/add',
+      name: 'Add code',
+      component: AddCode,
       meta: { requiresAuth: true }
     },
     {

@@ -9,19 +9,25 @@
           class="btn"
           v-bind:class="[isActive == 'total' ? 'btn-primary' : 'btn-light']"
           @click="filter('total')"
-        >Total</button>
+        >
+          Total
+        </button>
         <button
           type="button"
           class="btn"
           v-bind:class="[isActive == 'last' ? 'btn-primary' : 'btn-light']"
           @click="filter('last')"
-        >Last month</button>
+        >
+          Last month
+        </button>
         <button
           type="button"
           class="btn"
           v-bind:class="[isActive == '' ? 'btn-primary' : 'btn-light']"
           @click="filter()"
-        >This month</button>
+        >
+          This month
+        </button>
       </div>
 
       <div class="row text-white">

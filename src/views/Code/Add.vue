@@ -3,7 +3,7 @@
     <Nav />
 
     <div class="container pt-4">
-      <router-link to="/ref">
+      <router-link to="/contact">
         <button type="button" class="btn btn-secondary mb-3">Cancel</button>
       </router-link>
 
@@ -11,23 +11,14 @@
         <div v-if="isLoading" class="spinner-border"></div>
 
         <div v-else>
+          <label>Name</label>
           <div class="form-group">
-            <label>Title</label>
-            <input type="text" class="form-control" v-model="title" />
+            <input type="text" class="form-control" v-model="name" />
           </div>
 
+          <label>Phone number</label>
           <div class="form-group">
-            <label>Url</label>
-            <input type="text" class="form-control" v-model="url" />
-          </div>
-
-          <div class="form-group">
-            <label>Type</label>
-            <select v-model="type" class="form-control" id="sel1">
-              <option v-for="type in selectType" :key="type" :value="type">
-                {{ type }}
-              </option>
-            </select>
+            <input type="text" class="form-control" v-model="phoneNumber" />
           </div>
 
           <button
@@ -55,31 +46,28 @@ export default {
   data() {
     return {
       isLoading: false,
-      title: "",
-      url: "",
-      type: "Admin",
-      selectType: ["Admin", "User"],
+      name: "",
+      phoneNumber: "",
     };
   },
   methods: {
     add: function () {
       this.isLoading = !this.isLoading;
       axios({
-        url: API_URL + "/ref/add",
+        url: API_URL + "/contact",
         method: "POST",
         headers: {
           token: localStorage.getItem("token"),
         },
         data: {
-          title: this.title,
-          url: this.url,
-          type: this.type,
+          name: this.name,
+          phoneNumber: this.phoneNumber,
         },
       }).then((response) => {
         this.isLoading = !this.isLoading;
-        if (!response.data.status)
+        if (response.data.status == false)
           return this.showAlert(response.data.message, false);
-        this.$router.push({ path: "/ref" });
+        this.$router.push({ path: "/contact" });
       });
     },
   },

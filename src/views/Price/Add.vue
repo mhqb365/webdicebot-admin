@@ -4,25 +4,27 @@
 
     <div class="container pt-4">
       <router-link to="/price">
-        <button type="button" class="btn btn-secondary mb-2">Cancel</button>
+        <button type="button" class="btn btn-secondary mb-3">Cancel</button>
       </router-link>
 
-      <hr class="mt-2 mb-2" />
+      <div>
+        <div v-if="isLoading" class="spinner-border"></div>
 
-      <div v-if="isLoading" class="spinner-border"></div>
+        <div v-else>
+          <label>Limit</label>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="limit" />
+          </div>
 
-      <div v-else>
-        <label>Limit</label>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="limit" />
+          <label>Amount</label>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="amount" />
+          </div>
+
+          <button type="button" class="btn btn-primary btn-block" @click="add()">
+            Add
+          </button>
         </div>
-
-        <label>Amount</label>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="amount" />
-        </div>
-
-        <button type="button" class="btn btn-primary w-100" @click="add()">Add</button>
       </div>
     </div>
   </div>
@@ -62,14 +64,6 @@ export default {
         if (!response.data.status)
           return this.showAlert(response.data.message, false);
         this.$router.push({ path: "/price" });
-      });
-    },
-    showAlert: function (message, type = true) {
-      this.$swal.fire({
-        icon: `${type ? "success" : "error"}`,
-        title: message,
-        showConfirmButton: false,
-        timer: 15e2,
       });
     },
   },

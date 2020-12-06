@@ -21,28 +21,70 @@
             to="/"
             class="nav-link"
             v-bind:class="[this.$route.path == '/' ? 'active' : '']"
-          >Dashboard</router-link>
+            >Dashboard</router-link
+          >
         </li>
         <li class="nav-item">
           <router-link
             to="/license"
             class="nav-link"
-            v-bind:class="[this.$route.path == '/license'|| this.$route.path == '/license/add' ? 'active' : '']"
-          >License</router-link>
+            v-bind:class="[
+              this.$route.path == '/license' ||
+              this.$route.path == '/license/add'
+                ? 'active'
+                : '',
+            ]"
+            >License</router-link
+          >
         </li>
         <li class="nav-item">
           <router-link
             to="/price"
             class="nav-link"
-            v-bind:class="[this.$route.path == '/price' || this.$route.path == '/price/add' ? 'active' : '']"
-          >Price</router-link>
+            v-bind:class="[
+              this.$route.path == '/price' || this.$route.path == '/price/add'
+                ? 'active'
+                : '',
+            ]"
+            >Price</router-link
+          >
+        </li>
+        <li class="nav-item">
+          <router-link
+            to="/code"
+            class="nav-link"
+            v-bind:class="[
+              this.$route.path == '/code' || this.$route.path == '/code/add'
+                ? 'active'
+                : '',
+            ]"
+            >Code</router-link
+          >
         </li>
         <li class="nav-item">
           <router-link
             to="/ref"
             class="nav-link"
-            v-bind:class="[this.$route.path == '/ref' || this.$route.path == '/ref/add' ? 'active' : '']"
-          >Ref</router-link>
+            v-bind:class="[
+              this.$route.path == '/ref' || this.$route.path == '/ref/add'
+                ? 'active'
+                : '',
+            ]"
+            >Ref</router-link
+          >
+        </li>
+        <li class="nav-item">
+          <router-link
+            to="/contact"
+            class="nav-link"
+            v-bind:class="[
+              this.$route.path == '/contact' ||
+              this.$route.path == '/contact/add'
+                ? 'active'
+                : '',
+            ]"
+            >Contact</router-link
+          >
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" @click="logout()">Logout</a>
@@ -57,7 +99,7 @@ export default {
   methods: {
     logout: function () {
       localStorage.removeItem("token");
-      window.location.reload();
+      window.location.href = "/login";
     },
   },
 };

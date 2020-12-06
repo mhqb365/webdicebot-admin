@@ -13,7 +13,9 @@
         <input type="password" class="form-control" v-model="password" />
       </div>
 
-      <button type="button" class="btn btn-primary w-100" @click="login()">Login</button>
+      <button type="button" class="btn btn-primary btn-block" @click="login()">
+        Login
+      </button>
     </div>
   </div>
 </template>
@@ -45,15 +47,7 @@ export default {
         if (!response.data.status)
           return this.showAlert(response.data.message, false);
         localStorage.setItem("token", response.data.token);
-        this.$router.push({ path: "/" });
-      });
-    },
-    showAlert: function (message, type = true) {
-      this.$swal.fire({
-        icon: `${type ? "success" : "error"}`,
-        title: message,
-        showConfirmButton: false,
-        timer: 15e2,
+        window.location.href = "/";
       });
     },
   },

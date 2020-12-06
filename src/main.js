@@ -14,3 +14,23 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+
+Vue.mixin({
+  methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
+    clipboardSuccess: function ({ value, event }) {
+      this.showAlert("Copy success");
+    },
+    clipboardError: function ({ value, event }) {
+      this.showAlert("Copy fail", false);
+    },
+  }
+})

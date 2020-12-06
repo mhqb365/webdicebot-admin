@@ -8,7 +8,7 @@
       </router-link>
 
       <div class="mt-3 mb-3">
-        Total license: {{ totalDocs }} | Total pages: {{ totalPages }}
+        Docs: {{ totalDocs }} | Pages: {{ totalPages }}
       </div>
 
       <ul class="pagination">
@@ -27,14 +27,23 @@
         </li>
       </ul>
 
-      <div class="form-group">
+      <div class="input-group mb-3">
         <input
           type="text"
           class="form-control"
+          placeholder="Search by email"
           v-model="keyword"
           @change="search()"
-          placeholder="Search by email"
         />
+        <div class="input-group-append">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="emptyKeyWord()"
+          >
+            Clear
+          </button>
+        </div>
       </div>
 
       <div class="table-responsive-sm">
@@ -49,40 +58,40 @@
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="license in licenses" :key="license._id">
-              <td>{{ new Date(license.time).toLocaleDateString("vi-VN") }}</td>
+            <tr v-for="data in datas" :key="data._id">
+              <td>{{ new Date(data.time).toLocaleDateString("vi-VN") }}</td>
               <td>
                 <span
                   v-if="
-                    license.locked ||
-                    (Date.now() - new Date(license.time)) / 864e5 >
-                      license.price.limit
+                    data.locked ||
+                    (Date.now() - new Date(data.time)) / 864e5 >
+                      data.price.limit
                   "
                 >
                   <strike
-                    v-bind:class="{ 'text-primary': license.type == 'pay' }"
-                    >{{ license.email }}</strike
+                    v-bind:class="{ 'text-primary': data.type == 'pay' }"
+                    >{{ data.email }}</strike
                   >
                 </span>
                 <span
                   v-else
-                  v-bind:class="{ 'text-primary': license.type == 'pay' }"
-                  >{{ license.email }}</span
+                  v-bind:class="{ 'text-primary': data.type == 'pay' }"
+                  >{{ data.email }}</span
                 >
               </td>
-              <td>{{ license.price.limit }}</td>
+              <td>{{ data.price.limit }}</td>
               <td>
                 <div class="input-group mb-2 input-group-sm">
                   <input
                     type="password"
                     class="form-control"
-                    v-model="license.value"
+                    v-model="data.value"
                   />
                   <div class="input-group-append">
                     <button
                       type="button"
                       class="btn btn-primary"
-                      v-clipboard="() => license.value"
+                      v-clipboard="() => data.value"
                       v-clipboard:success="clipboardSuccess"
                       v-clipboard:error="clipboardError"
                     >
@@ -94,24 +103,21 @@
               <td>
                 <button
                   v-if="
-                    (Date.now() - new Date(license.time)) / 864e5 <
-                    license.price.limit
+                    (Date.now() - new Date(data.time)) / 864e5 <
+                    data.price.limit
                   "
                   type="button"
                   class="btn btn-warning btn-sm mb-2"
                   @click="
-                    confirm(
-                      license._id,
-                      `${license.locked ? 'unlock' : 'lock'}`
-                    )
+                    confirm(data._id, `${data.locked ? 'unlock' : 'lock'}`)
                   "
                 >
-                  {{ license.locked ? "Unlock" : "Lock" }}
+                  {{ data.locked ? "Unlock" : "Lock" }}
                 </button>
                 <button
                   type="button"
                   class="btn btn-danger btn-sm mb-2"
-                  @click="confirm(license._id, 'delete')"
+                  @click="confirm(data._id, 'delete')"
                 >
                   Delete
                 </button>
@@ -137,9 +143,8 @@ export default {
     return {
       isLoading: false,
       keyword: "",
-      licenses: [],
+      datas: [],
       perPage: 10,
-      currentPage: 1,
       page: 1,
       totalDocs: 0,
       totalPages: 0,
@@ -156,9 +161,7 @@ export default {
       axios({
         url:
           API_URL +
-          `/license?limit=${this.perPage}&page=${
-            page ? page : this.currentPage
-          }`,
+          `/license?limit=${this.perPage}&page=${page ? page : this.page}`,
         method: "GET",
         headers: {
           token: localStorage.getItem("token"),
@@ -166,7 +169,7 @@ export default {
       })
         .then((response) => {
           this.isLoading = !this.isLoading;
-          this.licenses = response.data.docs;
+          this.datas = response.data.docs;
           this.page = response.data.page;
           this.totalDocs = response.data.totalDocs;
           this.totalPages = response.data.totalPages;
@@ -182,18 +185,16 @@ export default {
         url:
           API_URL +
           `/license/search/${this.keyword}?limit=${this.perPage}&page=${
-            page ? page : this.currentPage
+            page ? page : this.page
           }`,
         method: "GET",
         headers: {
           token: localStorage.getItem("token"),
         },
-      })
-        .then((response) => {
-          this.isLoading = !this.isLoading;
-          this.licenses = response.data.docs;
-        })
-        .catch(() => this.$router.push({ path: "/login" }));
+      }).then((response) => {
+        this.isLoading = !this.isLoading;
+        this.datas = response.data.docs;
+      });
     },
     confirm: function (id, action) {
       this.$swal
@@ -227,20 +228,9 @@ export default {
         this.fetch();
       });
     },
-    clipboardSuccess: function ({ value, event }) {
-      if (value == null) return this.showAlert("Empty value", false);
-      this.showAlert("Copy success");
-    },
-    clipboardError: function ({ value, event }) {
-      this.showAlert("Copy fail", false);
-    },
-    showAlert: function (message, type = true) {
-      this.$swal.fire({
-        icon: `${type ? "success" : "error"}`,
-        title: message,
-        showConfirmButton: false,
-        timer: 15e2,
-      });
+    emptyKeyWord: function () {
+      this.keyword = "";
+      this.fetch();
     },
   },
 };

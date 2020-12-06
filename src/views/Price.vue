@@ -4,7 +4,7 @@
 
     <div class="container pt-4">
       <router-link to="/price/add">
-        <button type="button" class="btn btn-primary mb-2">Add</button>
+        <button type="button" class="btn btn-primary mb-3">Add</button>
       </router-link>
 
       <div class="table-responsive-sm">
@@ -17,7 +17,7 @@
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="price in prices" :key="price._id">
+            <tr v-for="price in datas" :key="price._id">
               <td>{{ price.limit }} Days</td>
               <td>{{ price.amount.pay.toLocaleString() }} Doge</td>
               <td>
@@ -25,7 +25,9 @@
                   type="button"
                   class="btn btn-danger btn-sm"
                   @click="confirm(price._id)"
-                >Delete</button>
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           </tbody>
@@ -47,39 +49,21 @@ export default {
   data() {
     return {
       isLoading: false,
-      prices: [],
+      datas: [],
       perPage: 20,
-      selectPer: [
-        {
-          value: 20,
-          text: 20,
-        },
-        {
-          value: 50,
-          text: 50,
-        },
-        {
-          value: 200,
-          text: 200,
-        },
-        {
-          value: 500,
-          text: 500,
-        },
-      ],
       currentPage: 1,
     };
   },
   mounted: function () {
-    this.fetchPrices();
+    this.fetch();
   },
   computed: {
     rows() {
-      return this.prices.length;
+      return this.datas.length;
     },
   },
   methods: {
-    fetchPrices: function (page) {
+    fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({
         url:
@@ -90,8 +74,7 @@ export default {
         .then((response) => {
           this.isLoading = !this.isLoading;
           // console.log(response.data);
-          this.prices = response.data.docs;
-          this.totalRows = response.data.length;
+          this.datas = response.data.docs;
         })
         .catch(() => this.$router.push({ path: "/login" }));
     },
@@ -103,20 +86,18 @@ export default {
         })
         .then((result) => {
           // console.log(result);
-          if (result.value) return this.delete(id);
+          if (result.value)
+            return axios({
+              url: API_URL + "/price/" + id,
+              method: "DELETE",
+              headers: {
+                token: localStorage.getItem("token"),
+              },
+            }).then((response) => {
+              // console.log(response);
+              this.fetch();
+            });
         });
-    },
-    delete: function (id) {
-      axios({
-        url: API_URL + "/price/" + id,
-        method: "DELETE",
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      }).then((response) => {
-        // console.log(response);
-        this.fetchPrices();
-      });
     },
   },
 };
