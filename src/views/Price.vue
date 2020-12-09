@@ -2,7 +2,7 @@
   <div>
     <Nav />
 
-    <div class="container pt-4">
+    <div class="container p-4">
       <router-link to="/price/add">
         <button type="button" class="btn btn-primary mb-3">Add</button>
       </router-link>

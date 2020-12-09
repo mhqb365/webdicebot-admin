@@ -11,15 +11,11 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
-
-* {
-  padding: 0;
-  margin: 0;
-}
-
 #app {
-  font-family: "Montserrat", sans-serif;
+  background-image: url("/static/bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
 }
 
 a:hover {

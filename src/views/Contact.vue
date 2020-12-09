@@ -2,7 +2,7 @@
   <div>
     <Nav />
 
-    <div class="container pt-4">
+    <div class="container p-4">
       <router-link to="/contact/add">
         <button type="button" class="btn btn-primary mb-2">Add</button>
       </router-link>
@@ -105,6 +105,14 @@ export default {
     this.fetch();
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
     fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({

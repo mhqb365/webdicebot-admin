@@ -2,7 +2,7 @@
   <div>
     <Nav />
 
-    <div class="container pt-4">
+    <div class="container p-4">
       <div class="btn-group mb-3">
         <button
           type="button"

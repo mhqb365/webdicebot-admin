@@ -3,7 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import './plugins'
+import './plugins/v-clipboard'
+import './plugins/vue-sweetalert2'
 
 Vue.config.productionTip = false
 
@@ -15,17 +16,8 @@ new Vue({
   template: '<App/>'
 })
 
-
 Vue.mixin({
   methods: {
-    showAlert: function (message, type = true) {
-      this.$swal.fire({
-        icon: `${type ? "success" : "error"}`,
-        title: message,
-        showConfirmButton: false,
-        timer: 2e3,
-      });
-    },
     clipboardSuccess: function ({ value, event }) {
       this.showAlert("Copy success");
     },

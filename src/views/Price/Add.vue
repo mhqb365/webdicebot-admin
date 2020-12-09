@@ -47,6 +47,14 @@ export default {
     };
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
     add: function () {
       this.isLoading = !this.isLoading;
       axios({
