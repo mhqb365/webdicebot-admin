@@ -58,7 +58,7 @@
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="data in datas" :key="data._id">
+            <tr v-for="data in datas" :key="data._id" :id="data._id">
               <td>{{ new Date(data.time).toLocaleDateString("vi-VN") }}</td>
               <td>
                 <span
@@ -156,6 +156,20 @@ export default {
     this.fetch();
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
+    clipboardSuccess: function ({ value, event }) {
+      this.showAlert("Copy success");
+    },
+    clipboardError: function ({ value, event }) {
+      this.showAlert("Copy fail", false);
+    },
     fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({
@@ -215,7 +229,8 @@ export default {
             token: localStorage.getItem("token"),
           },
         }).then((response) => {
-          this.fetch();
+          $("#" + id).remove();
+          this.showAlert("Delete success");
         });
 
       axios({
@@ -225,12 +240,12 @@ export default {
           token: localStorage.getItem("token"),
         },
       }).then((response) => {
-        this.fetch();
+        this.fetch(this.page);
       });
     },
     emptyKeyWord: function () {
       this.keyword = "";
-      this.fetch();
+      this.fetch(this.page);
     },
   },
 };

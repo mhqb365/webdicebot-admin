@@ -2,8 +2,8 @@
   <div>
     <Nav />
 
-    <div class="container pt-4">
-      <router-link to="/contact">
+    <div class="container p-4">
+      <router-link to="/code">
         <button type="button" class="btn btn-secondary mb-3">Cancel</button>
       </router-link>
 
@@ -11,21 +11,38 @@
         <div v-if="isLoading" class="spinner-border"></div>
 
         <div v-else>
-          <label>Name</label>
           <div class="form-group">
+            <label>Language</label>
+            <select class="form-control" v-model="type">
+              <option>Lua</option>
+              <option>Javascript</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" v-model="typeUser">
+              <option>Normal</option>
+              <option>Vip</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Code name</label>
             <input type="text" class="form-control" v-model="name" />
           </div>
 
-          <label>Phone number</label>
           <div class="form-group">
-            <input type="text" class="form-control" v-model="phoneNumber" />
+            <label>Share by</label>
+            <input type="text" class="form-control" v-model="author" />
           </div>
 
-          <button
-            type="button"
-            class="btn btn-primary btn-block"
-            @click="add()"
-          >
+          <div class="form-group">
+            <label>Content</label>
+            <textarea class="form-control" rows="5" id="content"></textarea>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-block" @click="add()">
             Add
           </button>
         </div>
@@ -47,8 +64,17 @@ export default {
     return {
       isLoading: false,
       name: "",
-      phoneNumber: "",
+      type: "Lua",
+      typeUser: "Normal",
+      content: "",
+      author: "",
+      simplemde: "",
     };
+  },
+  mounted: function () {
+    this.simplemde = new SimpleMDE({
+      element: document.getElementById("content"),
+    });
   },
   methods: {
     showAlert: function (message, type = true) {
@@ -62,20 +88,23 @@ export default {
     add: function () {
       this.isLoading = !this.isLoading;
       axios({
-        url: API_URL + "/contact",
+        url: API_URL + "/code",
         method: "POST",
         headers: {
           token: localStorage.getItem("token"),
         },
         data: {
           name: this.name,
-          phoneNumber: this.phoneNumber,
+          type: this.type,
+          typeUser: this.typeUser,
+          content: this.simplemde.value(),
+          author: this.author,
         },
       }).then((response) => {
         this.isLoading = !this.isLoading;
         if (response.data.status == false)
           return this.showAlert(response.data.message, false);
-        this.$router.push({ path: "/contact" });
+        this.$router.push({ path: "/code" });
       });
     },
   },

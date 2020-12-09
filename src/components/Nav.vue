@@ -2,11 +2,7 @@
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- Brand -->
 
-    <router-link
-      to="/"
-      class="text-white"
-      v-bind:class="[this.$route.path == '/' ? 'active' : '']"
-    >
+    <router-link to="/">
       <img
         src="/static/logo.png"
         class="rounded-circle mr-2 border border-white"
@@ -67,6 +63,21 @@
             ]"
           >
             Ref
+          </router-link>
+        </li>
+
+        <li class="nav-item">
+          <router-link
+            to="/code"
+            class="nav-link"
+            v-bind:class="[
+              this.$route.path == '/code' ||
+              this.$route.path == '/code/add'
+                ? 'active'
+                : '',
+            ]"
+          >
+            Code
           </router-link>
         </li>
 

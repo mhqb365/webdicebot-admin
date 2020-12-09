@@ -37,7 +37,7 @@
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="data in datas" :key="data._id">
+            <tr v-for="data in datas" :key="data._id" :id="data._id">
               <td>{{ data.title.slice(0, 32) }}</td>
               <td>{{ data.url }}</td>
               <td>
@@ -82,6 +82,14 @@ export default {
     this.fetch();
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
     fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({
@@ -119,7 +127,8 @@ export default {
                 token: localStorage.getItem("token"),
               },
             }).then((response) => {
-              this.fetch();
+              $("#" + id).remove();
+              this.showAlert("Delete success");
             });
         });
     },

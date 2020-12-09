@@ -3,7 +3,7 @@
     <Nav />
 
     <div class="container p-4">
-      <router-link to="/contact/add">
+      <router-link to="/code/add">
         <button type="button" class="btn btn-primary mb-2">Add</button>
       </router-link>
 
@@ -27,40 +27,23 @@
         </li>
       </ul>
 
-      <div class="input-group mb-3">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search by phone number"
-          v-model="keyword"
-          @change="search()"
-        />
-        <div class="input-group-append">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            @click="emptyKeyWord()"
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-
       <div class="table-responsive-sm">
         <div v-if="isLoading" class="spinner-border"></div>
 
         <table v-else class="table table-bordered table-sm bg-white">
           <thead>
-            <th>Time</th>
             <th>Name</th>
-            <th>Phone number</th>
+            <th>Type</th>
+            <th>Content</th>
+            <th>Author</th>
             <th>Action</th>
           </thead>
           <tbody>
             <tr v-for="data in datas" :key="data._id" :id="data._id">
-              <td>{{ new Date(data.time).toLocaleDateString("vi-VN") }}</td>
               <td>{{ data.name }}</td>
-              <td>{{ data.phoneNumber }}</td>
+              <td>{{ data.type }} - {{ data.typeUser }}</td>
+              <td>{{ data.content.slice(0, 50) }}</td>
+              <td>{{ data.author }}</td>
               <td>
                 <button
                   type="button"
@@ -105,12 +88,20 @@ export default {
     this.fetch();
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
     fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({
         url:
           API_URL +
-          `/contact?limit=${this.perPage}&page=${
+          `/code/admin?limit=${this.perPage}&page=${
             page ? page : this.currentPage
           }`,
         method: "GET",
@@ -129,24 +120,6 @@ export default {
         })
         .catch(() => this.$router.push({ path: "/login" }));
     },
-    search: function (page) {
-      if (this.keyword == "") return this.fetch();
-      this.isLoading = !this.isLoading;
-      axios({
-        url:
-          API_URL +
-          `/contact/search?keyword=${this.keyword}&limit=${this.perPage}&page=${
-            page ? page : this.currentPage
-          }`,
-        method: "GET",
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      }).then((response) => {
-        this.isLoading = !this.isLoading;
-        this.datas = response.data.docs;
-      });
-    },
     confirm: function (id, action) {
       this.$swal
         .fire({
@@ -158,7 +131,7 @@ export default {
             switch (action) {
               case "delete":
                 axios({
-                  url: API_URL + "/contact/" + id,
+                  url: API_URL + "/code/delete/" + id,
                   method: "DELETE",
                   headers: {
                     token: localStorage.getItem("token"),
@@ -171,10 +144,6 @@ export default {
             }
           }
         });
-    },
-    emptyKeyWord: function () {
-      this.keyword = "";
-      this.fetch();
     },
   },
 };

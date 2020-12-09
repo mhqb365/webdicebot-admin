@@ -17,7 +17,7 @@
             <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="price in datas" :key="price._id">
+            <tr v-for="price in datas" :key="price._id" :id="price._id">
               <td>{{ price.limit }} Days</td>
               <td>{{ price.amount.pay.toLocaleString() }} Doge</td>
               <td>
@@ -63,6 +63,14 @@ export default {
     },
   },
   methods: {
+    showAlert: function (message, type = true) {
+      this.$swal.fire({
+        icon: `${type ? "success" : "error"}`,
+        title: message,
+        showConfirmButton: false,
+        timer: 2e3,
+      });
+    },
     fetch: function (page) {
       this.isLoading = !this.isLoading;
       axios({
@@ -94,8 +102,8 @@ export default {
                 token: localStorage.getItem("token"),
               },
             }).then((response) => {
-              // console.log(response);
-              this.fetch();
+              $("#" + id).remove();
+              this.showAlert("Delete success");
             });
         });
     },
