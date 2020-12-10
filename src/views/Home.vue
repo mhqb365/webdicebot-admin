@@ -98,6 +98,14 @@
         </div>
 
         <div class="col-sm-12 col-md-3">
+          <router-link to="/code">
+            <div class="card mb-2">
+              <div class="card-body">Code</div>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
           <router-link to="/contact">
             <div class="card mb-2">
               <div class="card-body">Contact</div>
